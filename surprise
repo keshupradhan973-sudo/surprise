@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Surprise ❤️</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap');
+
+        :root {
+            --pink: #ff6b9d;
+            --dark-pink: #ff3e7f;
+            --light-pink: #fff0f5;
+            --text: #633b4b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff0f5, #ffe0eb, #fff5f8);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            padding: 25px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: appear 0.6s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.82);
+            width: 100%;
+            max-width: 440px;
+            padding: 35px 24px;
+            border-radius: 30px;
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 2;
+        }
+
+        .emoji {
+            font-size: 65px;
+            margin-bottom: 15px;
+            animation: heartbeat 1.8s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        h1 {
+            font-size: clamp(25px, 6vw, 34px);
+            line-height: 1.3;
+            margin-bottom: 14px;
+            color: #d6336c;
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 34px;
+            color: #e75480;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 22px;
+            color: #876170;
+        }
+
+        .ratings {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .rating {
+            border: 2px solid #ffd1df;
+            background: #fff8fb;
+            color: #d6336c;
+            border-radius: 13px;
+            padding: 13px 0;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .rating:hover,
+        .rating.selected {
+            background: var(--pink);
+            color: white;
+            border-color: var(--pink);
+            transform: translateY(-3px);
+        }
+
+        .button {
+            display: inline-block;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 28px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.25s, background 0.25s;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #ff7da8, #ff477e);
+            color: white;
+            box-shadow: 0 7px 20px rgba(255, 71, 126, 0.25);
+        }
+
+        .primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .secondary {
+            background: #fff;
+            color: #d6336c;
+            border: 2px solid #ffd1df;
+        }
+
+        .button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+            min-height: 70px;
+        }
+
+        #yesButton {
+            transform-origin: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        #noButton {
+            position: relative;
+            z-index: 4;
+        }
+
+        .small-note {
+            margin-top: 20px;
+            font-size: 11px;
+            color: #bc8b9d;
+        }
+
+        .love-letter {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #805164;
+            margin: 20px 0;
+        }
+
+        .proposal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .celebration {
+            display: none;
+            margin-top: 20px;
+            animation: appear 0.6s ease;
+        }
+
+        .celebration h2 {
+            font-size: 38px;
+        }
+
+        /* Floating hearts */
+
+        .heart {
+            position: fixed;
+            bottom: -30px;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear forwards;
+            opacity: 0.65;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            to {
+                transform: translateY(-115vh) rotate(35deg);
+                opacity: 0;
+            }
+        }
+
+        /* Final screen */
+
+        .final-card {
+            overflow: hidden;
+        }
+
+        .final-heart {
+            font-size: 85px;
+            animation: heartbeat 1s infinite;
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                padding: 28px 18px;
+            }
+
+            .options {
+                gap: 10px;
+            }
+
+            .button {
+                padding: 12px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SCREEN 1: Rate your day -->
+
+    <section class="screen active" id="screen1">
+        <div class="card">
+            <div class="emoji">🌷</div>
+
+            <h1>Hey, you!</h1>
+
+            <h2>How was your day?</h2>
+
+            <p>
+                Before you do anything else, tell me how your day went.
+                Be honest, okay? 🥹
+            </p>
+
+            <div class="ratings">
+                <button class="rating" onclick="selectRating(1)">1</button>
+                <button class="rating" onclick="selectRating(2)">2</button>
+                <button class="rating" onclick="selectRating(3)">3</button>
+                <button class="rating" onclick="selectRating(4)">4</button>
+                <button class="rating" onclick="selectRating(5)">5</button>
+                <button class="rating" onclick="selectRating(6)">6</button>
+                <button class="rating" onclick="selectRating(7)">7</button>
+                <button class="rating" onclick="selectRating(8)">8</button>
+                <button class="rating" onclick="selectRating(9)">9</button>
+                <button class="rating" onclick="selectRating(10)">10</button>
+            </div>
+
+            <p id="ratingMessage" style="margin-bottom: 15px;">
+                1 = terrible, 10 = absolutely amazing!
+            </p>
+
+            <button class="button primary" id="continueButton"
+                    onclick="nextScreen(2)" disabled>
+                Continue 💗
+            </button>
+
+            <div class="small-note">made with a little extra love ♡</div>
+        </div>
+    </section>
+
+
+    <!-- SCREEN 2: The surprise -->
+
+    <section class="screen" id="screen2">
+        <div class="card">
+            <div class="emoji">🧸</div>
+
+            <h2>Okay, listen...</h2>
+
+            <h1>Would you like something that could make your day even better?</h1>
+
+            <p>
+                I might have a little surprise for you.
+                And by little, I mean something I've been wanting to ask you. 💌
+            </p>
+
+            <div class="options">
+                <button class="button primary" id="yesButton"
+                        onclick="nextScreen(3)">
+                    YES! 💗
+                </button>
+
+                <button class="button secondary" id="noButton"
+                        onclick="growYes()">
+                    No 🙄
+                </button>
+            </div>
+
+            <p class="small-note" id="noMessage">
+                choose wisely, madam. 👀
+            </p>
+        </div>
+    </section>
+
+
+    <!-- SCREEN 3: The proposal -->
+
+    <section class="screen" id="screen3">
+        <div class="card final-card">
+            <div class="emoji">💌</div>
+
+            <h2>A little question for you...</h2>
+
+            <h1>Will you be my girlfriend? ❤️</h1>
+
+            <div class="love-letter">
+                Out of all the people I could've met,
+                I'm really glad I met you.
+
+                <br><br>
+
+                You make ordinary conversations feel special,
+                and somehow, talking to you has become one of
+                my favourite parts of the day.
+
+                <br><br>
+
+                So, here's me finally asking...
+                will you be mine? 🥹
+            </div>
+
+            <div class="proposal-buttons" id="proposalButtons">
+                <button class="button primary" onclick="sheSaidYes()">
+                    YES, I WILL! 💖
+                </button>
+
+                <button class="button secondary" onclick="sheSaidNo()">
+                    No
+                </button>
+            </div>
+
+            <div class="celebration" id="celebration">
+                <div class="final-heart">💖</div>
+                <h2>YOU SAID YES!!</h2>
+
+                <p>
+                    Okay, this is officially my favourite day ever.
+                    I promise to make you smile as much as I can. 🥹❤️
+                </p>
+
+                <h2>♡ Us, maybe forever? ♡</h2>
+            </div>
+
+            <p class="small-note">
+                whatever your answer, I'm glad I asked. ♡
+            </p>
+        </div>
+    </section>
+
+
+    <script>
+        let selectedRating = 0;
+        let noClicks = 0;
+        let yesScale = 1;
+
+        // Rate the day
+
+        function selectRating(rating) {
+            selectedRating = rating;
+
+            document.querySelectorAll(".rating").forEach(button => {
+                button.classList.remove("selected");
+            });
+
+            document.querySelectorAll(".rating")[rating - 1]
+                .classList.add("selected");
+
+            const message = document.getElementById("ratingMessage");
+
+            if (rating <= 3) {
+                message.textContent =
+                    "Oh no 🥺 I hope I can make you smile a little.";
+            } else if (rating <= 6) {
+                message.textContent =
+                    "An average day? Let's see if we can improve that. 💗";
+            } else if (rating <= 8) {
+                message.textContent =
+                    "Ooh, a pretty good day! Let's make it even better. 🌷";
+            } else {
+                message.textContent =
+                    "A 10?! Let's make it an 11 somehow! 💖";
+            }
+
+            document.getElementById("continueButton").disabled = false;
+        }
+
+        // Move between screens
+
+        function nextScreen(number) {
+            document.querySelectorAll(".screen").forEach(screen => {
+                screen.classList.remove("active");
+            });
+
+            document.getElementById("screen" + number)
+                .classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+            if (number === 2 || number === 3) {
+                startHearts();
+            }
+        }
+
+        // Every NO makes YES bigger
+
+        function growYes() {
+            noClicks++;
+
+            const yes = document.getElementById("yesButton");
+            const no = document.getElementById("noButton");
+            const message = document.getElementById("noMessage");
+
+            yesScale *= 1.45;
+
+            yes.style.transform = `scale(${yesScale})`;
+
+            no.style.transform = `scale(${Math.max(0, 1 - noClicks * 0.19)})`;
+
+            const messages = [
+                "Are you sure? 🥺",
+                "But what if it's something REALLY good? 👀",
+                "Come onnnn, just one little yes? 🥹",
+                "The YES button seems to be getting excited. 💗",
+                "Okay, now it's taking over the screen. 😭"
+            ];
+
+            message.textContent =
+                messages[Math.min(noClicks - 1, messages.length - 1)];
+
+            if (noClicks >= 5) {
+                no.style.display = "none";
+
+                yes.style.position = "fixed";
+                yes.style.left = "50%";
+                yes.style.top = "50%";
+                yes.style.transform = "translate(-50%, -50%)";
+                yes.style.width = "100vw";
+                yes.style.height = "100vh";
+                yes.style.borderRadius = "0";
+                yes.style.fontSize = "35px";
+                yes.style.zIndex = "1000";
+                yes.style.boxShadow = "none";
+
+                message.textContent = "Looks like YES has taken over! 💖";
+            }
+        }
+
+        // Proposal responses
+
+        function sheSaidYes() {
+            document.getElementById("proposalButtons").style.display = "none";
+            document.getElementById("celebration").style.display = "block";
+
+            startHearts();
+            startHearts();
+            startHearts();
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function sheSaidNo() {
+            const card = document.querySelector("#screen3 .card");
+
+            card.innerHTML = `
+                <div class="emoji">🌷</div>
+                <h1>That's okay. ❤️</h1>
+                <p>
+                    Thank you for being honest with me.
+                    Your answer matters, and I respect it.
+                    I'm still glad you took the time to see my little surprise. ♡
+                </p>
+            `;
+
+            startHearts();
+        }
+
+        // Floating heart animation
+
+        let heartsStarted = false;
+
+        function startHearts() {
+            if (heartsStarted) {
+                createHearts(8);
+                return;
+            }
+
+            heartsStarted = true;
+            createHearts(18);
+
+            setInterval(() => {
+                createHearts(3);
+            }, 1800);
+        }
+
+        function createHearts(amount) {
+            const symbols = ["💗", "💕", "♡", "💖", "🌸"];
+
+            for (let i = 0; i < amount; i++) {
+                const heart = document.createElement("div");
+
+                heart.className = "heart";
+                heart.textContent =
+                    symbols[Math.floor(Math.random() * symbols.length)];
+
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = (15 + Math.random() * 22) + "px";
+                heart.style.animationDuration = (5 + Math.random() * 6) + "s";
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 11000);
+            }
+        }
+
+        // Start with a few subtle floating hearts
+
+        createHearts(8);
+    </script>
+
+</body>
+</html>
